@@ -1,0 +1,180 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Student Exam Performance Indicator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Student Exam Performance Indicator</h1>
+
+    <form action="{{ url_for('predict_datapoint') }}" method="post">
+        <fieldset>
+            <legend>Student Exam Performance Prediction</legend>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select class="form-control" name="gender" required>
+                    <option disabled selected value="">Select your Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Race or Ethnicity</label>
+                <select class="form-control" name="ethnicity" required>
+                    <option disabled selected value="">Select Ethnicity</option>
+                    <option value="group A">Group A</option>
+                    <option value="group B">Group B</option>
+                    <option value="group C">Group C</option>
+                    <option value="group D">Group D</option>
+                    <option value="group E">Group E</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Parental Level of Education</label>
+                <select class="form-control" name="parental_level_of_education" required>
+                    <option disabled selected value="">Select Parent Education</option>
+                    <option value="associate's degree">associate's degree</option>
+                    <option value="bachelor's degree">bachelor's degree</option>
+                    <option value="high school">high school</option>
+                    <option value="master's degree">master's degree</option>
+                    <option value="some college">some college</option>
+                    <option value="some high school">some high school</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Lunch Type</label>
+                <select class="form-control" name="lunch" required>
+                    <option disabled selected value="">Select Lunch Type</option>
+                    <option value="free/reduced">free/reduced</option>
+                    <option value="standard">standard</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Test Preparation Course</label>
+                <select class="form-control" name="test_preparation_course" required>
+                    <option disabled selected value="">Select Test Course</option>
+                    <option value="none">None</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Reading Score (out of 100)</label>
+                <input type="number" class="form-control" name="reading_score" placeholder="Enter Reading Score" min="0" max="100" required>
+            </div>
+
+            <div class="form-group">
+                <label>Writing Score (out of 100)</label>
+                <input type="number" class="form-control" name="writing_score" placeholder="Enter Writing Score" min="0" max="100" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Predict your Maths Score</button>
+        </fieldset>
+    </form>
+
+    {% if results is not none %}
+        <div class="mt-4 alert alert-info">
+            <h4>Prediction Result:</h4>
+            <p>Your predicted <strong>Math Score</strong> is: {{ results }}</p>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Exam Performance Indicator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Student Exam Performance Indicator</h1>
+
+    <form action="{{ url_for('predict_datapoint') }}" method="post">
+        <fieldset>
+            <legend>Student Exam Performance Prediction</legend>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select class="form-control" name="gender" required>
+                    <option disabled value="">Select your Gender</option>
+                    <option value="male" {% if request.form.get('gender') == 'male' %}selected{% endif %}>Male</option>
+                    <option value="female" {% if request.form.get('gender') == 'female' %}selected{% endif %}>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Race or Ethnicity</label>
+                <select class="form-control" name="ethnicity" required>
+                    <option disabled value="">Select Ethnicity</option>
+                    {% for group in ['group A', 'group B', 'group C', 'group D', 'group E'] %}
+                        <option value="{{ group }}" {% if request.form.get('ethnicity') == group %}selected{% endif %}>{{ group }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Parental Level of Education</label>
+                <select class="form-control" name="parental_level_of_education" required>
+                    <option disabled value="">Select Parent Education</option>
+                    {% for edu in ["associate's degree", "bachelor's degree", "high school", "master's degree", "some college", "some high school"] %}
+                        <option value="{{ edu }}" {% if request.form.get('parental_level_of_education') == edu %}selected{% endif %}>{{ edu }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Lunch Type</label>
+                <select class="form-control" name="lunch" required>
+                    <option disabled value="">Select Lunch Type</option>
+                    <option value="free/reduced" {% if request.form.get('lunch') == 'free/reduced' %}selected{% endif %}>free/reduced</option>
+                    <option value="standard" {% if request.form.get('lunch') == 'standard' %}selected{% endif %}>standard</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Test Preparation Course</label>
+                <select class="form-control" name="test_preparation_course" required>
+                    <option disabled value="">Select Test Course</option>
+                    <option value="none" {% if request.form.get('test_preparation_course') == 'none' %}selected{% endif %}>None</option>
+                    <option value="completed" {% if request.form.get('test_preparation_course') == 'completed' %}selected{% endif %}>Completed</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Reading Score (out of 100)</label>
+                <input type="number" class="form-control" name="reading_score"
+                    placeholder="Enter Reading Score" min="0" max="100" required
+                    value="{{ request.form.get('reading_score', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label>Writing Score (out of 100)</label>
+                <input type="number" class="form-control" name="writing_score"
+                    placeholder="Enter Writing Score" min="0" max="100" required
+                    value="{{ request.form.get('writing_score', '') }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Predict your Maths Score</button>
+        </fieldset>
+    </form>
+
+    {% if results is not none %}
+        <div class="mt-4 alert alert-info">
+            <h4>Prediction Result:</h4>
+            <p>Your predicted <strong>Math Score</strong> is: {{ results }}</p>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>
